@@ -1,0 +1,19 @@
+manifestVersion: 1
+id: cockpit
+category: developer-tools
+name: Cockpit (WS)
+version: "0.1.0"
+tagline: Modern Linux admin for your Umbrel.
+description: |
+  This packages Cockpit’s web service container (cockpit/ws). Use it to
+  connect via SSH to this Umbrel or any other Linux machine. On Umbrel,
+  open the app and click “Connect to” → enter the host (e.g., umbrel.local or
+  your Umbrel’s IP) and your SSH credentials. No host installation of Cockpit
+  is required for basic pages when connecting via SSH.
+developer: Cockpit Project (Umbrel package)
+website: https://cockpit-project.org
+source: https://github.com/cockpit-project/cockpit
+support: https://cockpit-project.org
+port: 9090
+releaseNotes: ""
+dependencies: []
