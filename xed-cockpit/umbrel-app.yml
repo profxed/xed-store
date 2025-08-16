@@ -1,15 +1,16 @@
-manifestVersion: 1
-id: xed-cockpit
-category: system
-name: Cockpit
-version: "1.0.3"
-tagline: Web-based Linux server manager
-description: >
-  Cockpit is a browser-based interface for administering Linux servers.
-  This Umbrel package runs the Cockpit web service behind Umbrel's proxy.
-developer: Cockpit Project
-website: https://cockpit-project.org/
-repo: https://github.com/cockpit-project/cockpit
-support: https://cockpit-project.org/guide/latest/
-icon: https://cockpit-project.org/images/cockpit-logo.svg
-port: 9090
+id: xed
+title: Cockpit
+version: "0.3.1"
+icon: "https://cockpit-project.org/assets/favicon-196x196.png"
+category: "system"
+description: "Cockpit web interface for administering Linux servers from your Umbrel."
+port: 3019
+path: ""           # direct port access (e.g., http://umbrel.local:3019)
+releaseNotes: |
+  - Run HTTP behind Umbrel’s TLS proxy for clean SSL.
+  - Auto-generate cockpit.conf at container start (no manual config).
+  - Robust command that works across distros.
+website: "https://cockpit-project.org/"
+repo: "https://quay.io/repository/cockpit/ws"
+developer: "Cockpit Project"
+support: "https://cockpit-project.org/guide/latest/"

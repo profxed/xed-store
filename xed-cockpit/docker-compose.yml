@@ -3,31 +3,41 @@ version: "3.7"
 services:
   app_proxy:
     environment:
-      # Must be "<app-id>_<web-service>_1" per Umbrel's template
-      APP_HOST: xed-cockpit_web_1
+      # Route Umbrel's proxy to our web container
+      APP_HOST: web
       APP_PORT: 9090
+      # Uncomment to bypass Umbrel's login if you want the Cockpit login directly:
+      # PROXY_AUTH_ADD: "false"
 
   web:
     image: quay.io/cockpit/ws:latest
     restart: on-failure
     stop_grace_period: 1m
-    # No published ports; Umbrel's app_proxy connects internally.
-    command:
-      - /bin/sh
-      - -c
-      - |
-        set -eu
-        # Write a minimal config so Cockpit knows it's behind a TLS proxy
-        mkdir -p /etc/cockpit
-        cat > /etc/cockpit/cockpit.conf <<'EOF'
+    init: true
+    # No ports here; Umbrel publishes port 3019 from umbrel-app.yml via app_proxy
+    command: >
+      bash -lc '
+        set -e
+        mkdir -p /etc/cockpit;
+        cat >/etc/cockpit/cockpit.conf <<EOF
         [WebService]
-        ProtocolHeader = X-Forwarded-Proto
         AllowUnencrypted = true
+        ProtocolHeader = X-Forwarded-Proto
+        LoginTo = true
         EOF
-
-        # Find cockpit-ws (Fedora path first, Debian-style fallback)
-        BIN="/usr/libexec/cockpit-ws"
-        [ -x "$BIN" ] || BIN="/usr/lib/cockpit/cockpit-ws"
-
-        # Run plain HTTP for the proxy, but generate HTTPS-aware CSP/origins
-        exec "$BIN" --no-tls --for-tls-proxy --address 0.0.0.0 --port 9090
+        if command -v cockpit-ws >/dev/null 2>&1; then
+          exec cockpit-ws --no-tls --for-tls-proxy --address 0.0.0.0 --port 9090
+        elif [ -x /usr/libexec/cockpit-ws ]; then
+          exec /usr/libexec/cockpit-ws --no-tls --for-tls-proxy --address 0.0.0.0 --port 9090
+        elif [ -x /usr/lib/cockpit/cockpit-ws ]; then
+          exec /usr/lib/cockpit/cockpit-ws --no-tls --for-tls-proxy --address 0.0.0.0 --port 9090
+        else
+          echo "cockpit-ws not found in PATH or standard locations"; sleep 600; exit 1
+        fi
+      '
+    # Optional: simple readiness probe without curl/wget
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/9090; echo -e 'GET /ping HTTP/1.1\r\nHost: localhost\r\n\r\n' >&3; head -n 1 <&3 | grep -q '200'"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
