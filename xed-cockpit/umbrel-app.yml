@@ -1,16 +1,16 @@
 manifestVersion: 1
 id: xed-cockpit
 name: Cockpit
-version: "1.0.0"
-category: System
+version: "1.0.1"
+category: system
 tagline: Web-based Linux server manager
-description: |
+description: >
   Cockpit is a browser-based interface for administering Linux servers.
-  This package runs the Cockpit web service in a container. You can connect
-  to your Umbrel host or any other Linux machine over SSH from the Cockpit UI.
+  This package runs the Cockpit web service in a container and lets you
+  connect to your Umbrel host or other machines over SSH from the UI.
 developer: Cockpit Project
 website: https://cockpit-project.org/
-repository: https://github.com/cockpit-project/cockpit
+repo: https://github.com/cockpit-project/cockpit
 support: https://cockpit-project.org/guide/latest/
 icon: icon.svg
 port: 9090

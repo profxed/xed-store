@@ -1,19 +1,19 @@
 version: "3.7"
 
 services:
+  app_proxy:
+    environment:
+      # MUST be "<app-id>_<web-service>_1"
+      APP_HOST: xed-cockpit_web_1
+      APP_PORT: 9090
+
   web:
-    image: ghcr.io/realk1ko/cockpit:latest
-    restart: unless-stopped
+    image: quay.io/cockpit/ws:latest
+    restart: on-failure
     stop_grace_period: 1m
-    # Umbrel's app proxy forwards to container port defined in umbrel-app.yml (9090),
-    # so we do NOT publish host ports here.
+    # No published ports; Umbrel's app_proxy handles 9090
     environment:
       - COCKPIT_SSH_KNOWN_HOSTS_FILE=/etc/ssh/ssh_known_hosts
     volumes:
       - ${APP_DATA_DIR}/config:/etc/cockpit
       - ${APP_DATA_DIR}/ssh_known_hosts:/etc/ssh/ssh_known_hosts
-    # no privileged/host network needed with this image
-
-# Optional: pin the image to a digest for reproducible installs.
-# Example:
-#   image: ghcr.io/realk1ko/cockpit:latest@sha256:<digest>
