@@ -1,16 +1,16 @@
 manifestVersion: 1
 id: xed-cockpit
 name: Cockpit
-tagline: Web-based server manager
-category: utilities
-version: "0.1.0"
-description: Cockpit served behind Umbrel's proxy. TLS is terminated by Umbrel.
+version: "1.0.0"
+category: System
+tagline: Web-based Linux server manager
+description: |
+  Cockpit is a browser-based interface for administering Linux servers.
+  This package runs the Cockpit web service in a container. You can connect
+  to your Umbrel host or any other Linux machine over SSH from the Cockpit UI.
 developer: Cockpit Project
-website: https://cockpit-project.org
-repo: https://github.com/profxed/xed-store
-support: https://cockpit-project.org
+website: https://cockpit-project.org/
+repository: https://github.com/cockpit-project/cockpit
+support: https://cockpit-project.org/guide/latest/
+icon: icon.svg
 port: 9090
-gallery: []
-path: ""
-defaultUsername: ""
-defaultPassword: ""
