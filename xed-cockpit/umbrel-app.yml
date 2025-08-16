@@ -1,18 +1,15 @@
 manifestVersion: 1
 id: xed-cockpit
-category: developer
-name: Cockpit Web Console
-version: 1.0.2
-tagline: A lightweight, web-based Linux server manager
+category: system
+name: Cockpit
+version: "1.0.3"
+tagline: Web-based Linux server manager
 description: >
-  Cockpit is a web-based graphical interface for Linux servers. This Umbrel
-  app exposes the Cockpit Web Service behind Umbrel's app proxy.
-releaseNotes: >
-  Fix Umbrel reverse-proxy SSL error by running cockpit-ws behind a TLS-terminating
-  proxy and disabling TLS in the backend.
+  Cockpit is a browser-based interface for administering Linux servers.
+  This Umbrel package runs the Cockpit web service behind Umbrel's proxy.
 developer: Cockpit Project
-website: https://cockpit-project.org
+website: https://cockpit-project.org/
 repo: https://github.com/cockpit-project/cockpit
-support: https://github.com/cockpit-project/cockpit/discussions
-port: 9090
+support: https://cockpit-project.org/guide/latest/
 icon: https://cockpit-project.org/images/cockpit-logo.svg
+port: 9090

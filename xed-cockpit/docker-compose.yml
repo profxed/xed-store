@@ -3,19 +3,31 @@ version: "3.7"
 services:
   app_proxy:
     environment:
-      # Point Umbrel's proxy at the Cockpit backend
+      # Must be "<app-id>_<web-service>_1" per Umbrel's template
       APP_HOST: xed-cockpit_web_1
       APP_PORT: 9090
-      # Trust upstream proxy headers (X-Forwarded-*)
-      PROXY_TRUST_UPSTREAM: "true"
 
   web:
     image: quay.io/cockpit/ws:latest
     restart: on-failure
     stop_grace_period: 1m
-    # Tell cockpit-ws that TLS is terminated by the reverse proxy (Umbrel)
-    # and serve plain HTTP on 9090.
-    command: ["/usr/libexec/cockpit-ws", "--no-tls", "--for-tls-proxy", "--port", "9090", "--address", "0.0.0.0"]
-    volumes:
-      # Provide an optional config file (see below) at /etc/cockpit/cockpit.conf
-      - ${APP_DATA_DIR}/config:/etc/cockpit
+    # No published ports; Umbrel's app_proxy connects internally.
+    command:
+      - /bin/sh
+      - -c
+      - |
+        set -eu
+        # Write a minimal config so Cockpit knows it's behind a TLS proxy
+        mkdir -p /etc/cockpit
+        cat > /etc/cockpit/cockpit.conf <<'EOF'
+        [WebService]
+        ProtocolHeader = X-Forwarded-Proto
+        AllowUnencrypted = true
+        EOF
+
+        # Find cockpit-ws (Fedora path first, Debian-style fallback)
+        BIN="/usr/libexec/cockpit-ws"
+        [ -x "$BIN" ] || BIN="/usr/lib/cockpit/cockpit-ws"
+
+        # Run plain HTTP for the proxy, but generate HTTPS-aware CSP/origins
+        exec "$BIN" --no-tls --for-tls-proxy --address 0.0.0.0 --port 9090
