@@ -3,17 +3,19 @@ version: "3.7"
 services:
   app_proxy:
     environment:
-      # MUST be "<app-id>_<web-service>_1"
+      # Point Umbrel's proxy at the Cockpit backend
       APP_HOST: xed-cockpit_web_1
       APP_PORT: 9090
+      # Trust upstream proxy headers (X-Forwarded-*)
+      PROXY_TRUST_UPSTREAM: "true"
 
   web:
     image: quay.io/cockpit/ws:latest
     restart: on-failure
     stop_grace_period: 1m
-    # No published ports; Umbrel's app_proxy handles 9090
-    environment:
-      - COCKPIT_SSH_KNOWN_HOSTS_FILE=/etc/ssh/ssh_known_hosts
+    # Tell cockpit-ws that TLS is terminated by the reverse proxy (Umbrel)
+    # and serve plain HTTP on 9090.
+    command: ["/usr/libexec/cockpit-ws", "--no-tls", "--for-tls-proxy", "--port", "9090", "--address", "0.0.0.0"]
     volumes:
+      # Provide an optional config file (see below) at /etc/cockpit/cockpit.conf
       - ${APP_DATA_DIR}/config:/etc/cockpit
-      - ${APP_DATA_DIR}/ssh_known_hosts:/etc/ssh/ssh_known_hosts
