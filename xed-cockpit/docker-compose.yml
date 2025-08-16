@@ -4,19 +4,19 @@ services:
   app_proxy:
     image: getumbrel/app-proxy
     restart: unless-stopped
-    # Umbrel’s proxy will forward HTTPS → HTTP to your app
     environment:
+      # MUST point at "<app-id>_<service-name>_1" and include the trailing "_1"
       APP_HOST: xed-cockpit_web_1
       APP_PORT: 9090
-      # optional: PROXY_AUTH_ADD: "false" to bypass Umbrel auth
-      # optional: PROXY_AUTH_WHITELIST: "/api/*"
+      # Optional tweaks:
+      # PROXY_AUTH_ADD: "false"
+      # PROXY_AUTH_WHITELIST: "/api/*"
 
   web:
-    # Use/build an image that runs cockpit-ws (multi-arch if you’re on Pi)
-    image: fedora/cockpitws
+    image: ghcr.io/realk1ko/cockpit:latest
     restart: on-failure
     stop_grace_period: 1m
     command: ["cockpit-ws","--no-tls","--port","9090","--address","0.0.0.0"]
     volumes:
-      - ${APP_DATA_DIR}/config/cockpit.conf:/etc/cockpit/cockpit.conf:ro
-    # NOTE: No port mapping needed when using app_proxy
+      - ${APP_DATA_DIR}/config:/etc/cockpit
+    # No ports: Umbrel’s proxy handles public access

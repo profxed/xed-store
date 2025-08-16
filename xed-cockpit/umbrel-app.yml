@@ -2,20 +2,15 @@ manifestVersion: 1
 id: xed-cockpit
 name: Cockpit
 tagline: Web-based server manager
-icon: https://cockpit-project.org/assets/images/fedora-logo-sprite.png
-category: Utilities
+category: utilities
 version: "0.1.0"
-port: 9090
-description: >
-  Cockpit served behind Umbrel's reverse proxy. TLS is terminated by Umbrel.
-  UN-OFFICIAL
+description: Cockpit served behind Umbrel's proxy. TLS is terminated by Umbrel.
 developer: Cockpit Project
 website: https://cockpit-project.org
 repo: https://github.com/profxed/xed-store
 support: https://cockpit-project.org
+port: 9090
 gallery: []
-releaseNotes: Initial release
-dependencies: []
 path: ""
 defaultUsername: ""
 defaultPassword: ""
