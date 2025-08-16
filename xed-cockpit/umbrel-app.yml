@@ -1,5 +1,5 @@
 manifestVersion: 1
-id: cockpit
+id: xed-cockpit
 category: developer-tools
 name: Cockpit (WS)
 version: "0.1.0"
