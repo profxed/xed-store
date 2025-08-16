@@ -1,17 +1,21 @@
-id: xed-cockpit
 manifestVersion: 1
-title: Cockpit
-version: "0.3.1"
-icon: "https://cockpit-project.org/assets/favicon-196x196.png"
-category: "system"
-description: "Cockpit web interface for administering Linux servers from your Umbrel."
-port: 3019
-path: ""           # direct port access (e.g., http://umbrel.local:3019)
-releaseNotes: |
-  - Run HTTP behind Umbrel’s TLS proxy for clean SSL.
-  - Auto-generate cockpit.conf at container start (no manual config).
-  - Robust command that works across distros.
-website: "https://cockpit-project.org/"
-repo: "https://quay.io/repository/cockpit/ws"
-developer: "Cockpit Project"
-support: "https://cockpit-project.org/guide/latest/"
+id: xed-cockpit
+name: Cockpit
+tagline: Web-based server manager
+icon: https://cockpit-project.org/assets/images/fedora-logo-sprite.png
+category: Utilities
+version: "0.1.0"
+port: 9090
+description: >
+  Cockpit served behind Umbrel's reverse proxy. TLS is terminated by Umbrel.
+  UN-OFFICIAL
+developer: Cockpit Project
+website: https://cockpit-project.org
+repo: https://github.com/profxed/xed-store
+support: https://cockpit-project.org
+gallery: []
+releaseNotes: Initial release
+dependencies: []
+path: ""
+defaultUsername: ""
+defaultPassword: ""

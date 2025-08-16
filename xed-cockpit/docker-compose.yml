@@ -4,7 +4,7 @@ services:
   app_proxy:
     environment:
       # Route Umbrel's proxy to our web container
-      APP_HOST: web
+      APP_HOST: xed_web_1
       APP_PORT: 9090
       # Uncomment to bypass Umbrel's login if you want the Cockpit login directly:
       # PROXY_AUTH_ADD: "false"
