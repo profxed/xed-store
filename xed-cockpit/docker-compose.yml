@@ -1,24 +1,22 @@
 version: "3.7"
 
 services:
-  # Umbrel's built-in reverse proxy
   app_proxy:
-    environment:
-      APP_HOST: cockpit
-      APP_PORT: 9090
-      # Uncomment to make the app public without Umbrel login (not recommended):
-      # PROXY_AUTH_ADD: "false"
-
-  # Cockpit web service (no host install needed when connecting via SSH)
-  cockpit:
-    container_name: cockpit_ws
-    image: quay.io/cockpit/ws:latest
+    image: getumbrel/app-proxy
     restart: unless-stopped
-    # Store SSH keys / known_hosts so you can use key-based auth in Cockpit
-    volumes:
-      - ${APP_DATA_DIR}/keys:/keys:ro
-      - ${APP_DATA_DIR}/ssh_known_hosts:/root/.ssh/known_hosts
+    # Umbrel’s proxy will forward HTTPS → HTTP to your app
     environment:
-      # Point Cockpit at your private key (place it in ${APP_DATA_DIR}/keys)
-      - COCKPIT_SSH_KEY_PATH=/keys/id_ed25519
+      APP_HOST: xed-cockpit_web_1
+      APP_PORT: 9090
+      # optional: PROXY_AUTH_ADD: "false" to bypass Umbrel auth
+      # optional: PROXY_AUTH_WHITELIST: "/api/*"
+
+  web:
+    # Use/build an image that runs cockpit-ws (multi-arch if you’re on Pi)
+    image: fedora/cockpitws
+    restart: on-failure
     stop_grace_period: 1m
+    command: ["cockpit-ws","--no-tls","--port","9090","--address","0.0.0.0"]
+    volumes:
+      - ${APP_DATA_DIR}/config/cockpit.conf:/etc/cockpit/cockpit.conf:ro
+    # NOTE: No port mapping needed when using app_proxy
